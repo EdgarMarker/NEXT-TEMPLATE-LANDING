@@ -1,0 +1,21 @@
+.filter__container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4vh;
+
+  .filter-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    select {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+    }
+  }
+
+  .listado {
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

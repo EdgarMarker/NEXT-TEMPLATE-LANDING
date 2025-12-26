@@ -1,0 +1,30 @@
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+}
+
+.btn__link--primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.btn__wa {
+  position: fixed;
+  right: 20px;
+  bottom: calc(5% - 30px);
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  background-color: #13802c;
+  border-radius: 60px;
+  a {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
