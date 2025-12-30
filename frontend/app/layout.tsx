@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "./styles/globals.css";
 import LenisProvider from "./common/lib/lenis/LenisProvider";
 import { AnalyticsProvider } from "./common/utils/AnalyticsProvider";
 import WAButton from "./common/components/btn/WAButton";

@@ -27,7 +27,11 @@ export const AMENITY_FIELDS = `
   _type,
   iconName,
   iconSet,
-  name
+  name,
+  customIcon {
+    "media": asset -> { url },
+    "alt": asset -> { altText }
+  }
 `;
 
 export const getAmenityData = async () => {

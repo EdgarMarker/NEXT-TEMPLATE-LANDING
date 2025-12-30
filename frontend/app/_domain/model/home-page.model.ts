@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseModel, Block, Image, SEO } from "../module.interface";
+import { BaseModel, Block, IconPackage, Image, SEO } from "../module.interface";
 
 export class TestimonialModel extends BaseModel {
   public _id!: string;
@@ -38,8 +38,9 @@ export class AmenityModel extends BaseModel {
   public _type!: string;
 
   public iconName!: string;
-  public iconSet!: string;
+  public iconSet!: IconPackage;
   public name!: string;
+  public customIcon!: Image;
 
   constructor(data: any) {
     super();
@@ -63,7 +64,7 @@ export class HomePageModel extends BaseModel {
 
   public amenities!: {
     list_block_title_amenities_amenitiesTitle: Block[];
-    list_ref_amenities_amenitiesList: TestimonialModel[];
+    list_ref_amenities_amenitiesList: AmenityModel[];
   };
   public gallery!: {
     list_block_title_gallery_galleryTitle: Block[];
@@ -103,14 +104,16 @@ export class HomePageModel extends BaseModel {
         ),
         list_ref_amenities_amenitiesList: this.safeReferenceArray(
           data?.amenities?.list_ref_amenities_amenitiesList,
-          TestimonialModel
+          AmenityModel
         ),
       },
       gallery: {
         list_block_title_gallery_galleryTitle: this.safeBlockText(
           data?.gallery?.list_block_title_gallery_galleryTitle
         ),
-        list_images: this.safeImage(data?.gallery?.list_images),
+        list_images: this.safeArray(data?.gallery?.list_images, (img: any) =>
+          this.safeImage(img)
+        ),
       },
       hero: {
         img_hero_banner: this.safeImage(data?.hero?.img_hero_banner),
