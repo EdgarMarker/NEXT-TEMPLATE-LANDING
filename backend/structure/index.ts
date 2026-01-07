@@ -10,6 +10,7 @@ import {
 import {MdIntegrationInstructions} from 'react-icons/md'
 import type {StructureResolver} from 'sanity/structure'
 import {MAGIC_TITLE} from '../schemaTypes/pages'
+import { BiSolidDrink } from "react-icons/bi";
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -23,7 +24,7 @@ export const structure: StructureResolver = (S) =>
       S.divider(),
       //----------------------------------------------
       S.listItem()
-        .icon(FaComment)
+        .icon(FaStore)
         .title('Lista de Productos')
         .child(
           S.documentTypeList(MAGIC_TITLE.toLowerCase())
@@ -39,7 +40,7 @@ export const structure: StructureResolver = (S) =>
             .filter('_type == "testimonial"'),
         ),
       S.listItem()
-        .icon(FaComment)
+        .icon(BiSolidDrink)
         .title('Lista de Amenidades')
         .child(
           S.documentTypeList('amenity').title('Lista de Amenidades').filter('_type == "amenity"'),

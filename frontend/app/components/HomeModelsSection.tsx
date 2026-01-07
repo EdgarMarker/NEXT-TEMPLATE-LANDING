@@ -105,7 +105,7 @@ const HomeModelsSection = ({ data }: Props) => {
                   </button>
                 </div>
                 <Splide
-                  ref={(el) => (galleryRefs.current[idx] = el)}
+                  ref={(el: any) => (galleryRefs.current[idx] = el)}
                   options={splideGalleryOptions}
                 >
                   {model.general.list_gallery.map((product, imgIdx) => (
