@@ -11,6 +11,7 @@ import HomeTestySliderSection from "./components/HomeTestySliderSection";
 import HomeGalleryLightBoxSection from "./components/HomeGalleryLightBoxSection";
 import PreFooter from "./common/components/footer/PreFooter";
 import Footer from "./common/components/footer/Footer";
+import HomeModelsSection from "./components/HomeModelsSection";
 
 export const generateMetadata = async () => {
   return generateMetadataFromContract(getHomePageData, HomePageModel);
@@ -37,11 +38,21 @@ export default async function Home() {
           </div>
           <div className="col__right">
             <ResponsiveImage imageData={data.hero.img_hero_banner} />
+            <video src={data.hero.file_video.media.url} loop muted autoPlay />
           </div>
         </div>
       </section>
 
-      <section className="section__intro">
+      <section className="section__quote">
+        <div className="column__1">
+          <CustomPortableText
+            hasImg={false}
+            data={data.quote.list_block_title_quote_quoteText}
+          />
+        </div>
+      </section>
+
+      <section className="section__intro" id="Intro">
         <div className="column__2">
           <div className="col__left">
             <CustomPortableText
@@ -55,7 +66,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section__amenity">
+      <section className="section__amenity" id="Amenities">
         <div className="column__1">
           <CustomPortableText
             hasImg={false}
@@ -75,7 +86,15 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section__location">
+      <section className="divider__1">
+        <div className="column__1">
+          <ResponsiveImage
+            imageData={data.divider_1.img_divider_1_dividerImage}
+          />
+        </div>
+      </section>
+
+      <section className="section__location" id="Location">
         <div className="column__2">
           <div className="col__left">
             <CustomPortableText
@@ -87,6 +106,16 @@ export default async function Home() {
             <ResponsiveImage imageData={data.location.img_location_svg} />
             <ResponsiveImage imageData={data.location.icon_location_pin} />
           </div>
+        </div>
+      </section>
+
+      <HomeModelsSection data={data.serialize()} />
+
+      <section className="divider__2">
+        <div className="column__1">
+          <ResponsiveImage
+            imageData={data.divider_2.img_divider_2_dividerImage}
+          />
         </div>
       </section>
 

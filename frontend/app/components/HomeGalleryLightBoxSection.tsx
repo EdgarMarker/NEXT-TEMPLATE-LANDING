@@ -20,7 +20,7 @@ const HomeGalleryLightBoxSection = ({ data }: Props) => {
   }));
 
   return (
-    <section>
+    <section className="section__gallery" id="Gallery">
       <div className="column__1">
         <CustomPortableText
           hasImg={false}

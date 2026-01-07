@@ -4,6 +4,7 @@ import { createContract } from "../../utils/helper-contract";
 import { getCompanyData } from "@/app/_domain/services/company.services";
 import { CompanyModel } from "@/app/_domain/model/company.model";
 import ResponsiveImage from "../img/ResponsiveImage";
+import ScrollToButton from "../btn/ScrollToButton";
 
 export default async function Footer() {
   const data = await createContract(getCompanyData, CompanyModel);
@@ -19,7 +20,7 @@ export default async function Footer() {
               {NAV_ITEMS.map((item) => {
                 return (
                   <li key={item.href}>
-                    <a href={item.href}>{item.title}</a>
+                    <ScrollToButton to={item.href}>{item.title}</ScrollToButton>
                   </li>
                 );
               })}

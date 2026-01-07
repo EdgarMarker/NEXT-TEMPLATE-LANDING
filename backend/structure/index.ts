@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fa'
 import {MdIntegrationInstructions} from 'react-icons/md'
 import type {StructureResolver} from 'sanity/structure'
+import {MAGIC_TITLE} from '../schemaTypes/pages'
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -21,6 +22,14 @@ export const structure: StructureResolver = (S) =>
       //----------------------------------------------
       S.divider(),
       //----------------------------------------------
+      S.listItem()
+        .icon(FaComment)
+        .title('Lista de Productos')
+        .child(
+          S.documentTypeList(MAGIC_TITLE.toLowerCase())
+            .title('Lista de Productos')
+            .filter(`_type == "${MAGIC_TITLE.toLowerCase()}"`),
+        ),
       S.listItem()
         .icon(FaComment)
         .title('Lista de Testimonios')

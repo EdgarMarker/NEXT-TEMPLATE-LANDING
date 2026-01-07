@@ -1,22 +1,22 @@
 export const NAV_ITEMS = [
   {
-    title: "Inicio",
-    href: "/",
+    title: "Introducción",
+    href: "#Intro",
   },
   {
-    title: "Nosotros",
-    href: "/nosotros",
+    title: "Amenidades",
+    href: "#Amenities",
   },
   {
-    title: "Productos",
-    href: "/productos",
+    title: "Ubicación",
+    href: "#Location",
   },
   {
-    title: "Blog",
-    href: "/blog",
+    title: "Modelos",
+    href: "#Models",
   },
   {
-    title: "Contacto",
-    href: "/contacto",
+    title: "Galería",
+    href: "#Gallery",
   },
 ] as const;

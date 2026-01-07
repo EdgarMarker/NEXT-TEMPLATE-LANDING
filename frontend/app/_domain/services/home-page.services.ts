@@ -47,6 +47,33 @@ export const getAmenityData = async () => {
 
 //////////////////////////////////////////////////////////////////////
 
+export const PRODUCTO_FIELDS = `
+  _id,
+  _type,
+  general {
+    list_block_title_general_description,
+    list_gallery[]{
+      "media": asset -> { url },
+      "alt": asset -> { altText }
+    },
+    string_line_general_category,
+    string_line_general_title
+  }
+`;
+
+export const getProductoData = async () => {
+  const QUERY = `
+    *[_type == "producto"][0] {
+      ${PRODUCTO_FIELDS}
+    }
+  `;
+
+  const data = await getSanityClient().fetch(QUERY);
+  return data;
+};
+
+//////////////////////////////////////////////////////////////////////
+
 export const HOMEPAGE_FIELDS = `
   _id,
   _type,
@@ -64,6 +91,9 @@ export const HOMEPAGE_FIELDS = `
     }
   },
   hero {
+    file_video{
+      "media": asset -> { url }
+    },
     img_hero_banner {
       "media": asset -> { url },
       "alt": asset -> { altText }
@@ -72,12 +102,27 @@ export const HOMEPAGE_FIELDS = `
     string_h1,
     string_line_hero_button
   },
+  quote {
+    list_block_title_quote_quoteText
+  },
   intro {
     img_intro_introImage {
       "media": asset -> { url },
       "alt": asset -> { altText }
     },
     list_block_title_intro_introTitle
+  },
+  divider_1 {
+    img_divider_1_dividerImage {
+      "media": asset -> { url },
+      "alt": asset -> { altText }
+    }
+  },
+  divider_2 {
+    img_divider_2_dividerImage {
+      "media": asset -> { url },
+      "alt": asset -> { altText }
+    }
   },
   location {
     icon_location_pin {
@@ -89,6 +134,12 @@ export const HOMEPAGE_FIELDS = `
       "alt": asset -> { altText }
     },
     list_block_title_location_locationTitle
+  },
+  models {
+    list_block_title_models_modelsTitle,
+    list_ref_models_modelsList[] -> {
+      ${PRODUCTO_FIELDS}
+    }
   },
   testy {
     list_block_title_testy_testyTitle,

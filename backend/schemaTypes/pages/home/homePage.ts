@@ -1,7 +1,19 @@
 import {createSection} from '../../../utils/helper-createSection'
 import {HERO, image, listBlockText, reference, SEO} from '../../modules/modules'
+import {MAGIC_TITLE} from '../product/product'
 
 const SECTIONS = [
+  {
+    group: {name: 'quote', title: 'Sección de frase'},
+    fields: [
+      listBlockText({
+        type: 'title',
+        context: 'quote',
+        purpose: 'quoteText',
+        title: 'Texto de la Frase',
+      }),
+    ],
+  },
   {
     group: {name: 'intro', title: 'Sección de Introducción'},
     fields: [
@@ -40,6 +52,18 @@ const SECTIONS = [
   },
 
   {
+    group: {name: 'divider_1', title: 'Sección de primer divisor'},
+    fields: [
+      image({
+        type: 'img',
+        context: 'divider_1',
+        purpose: 'dividerImage',
+        title: 'Imagen del Divisor',
+      }),
+    ],
+  },
+
+  {
     group: {name: 'location', title: 'Sección de Ubicación'},
     fields: [
       listBlockText({
@@ -59,6 +83,40 @@ const SECTIONS = [
         context: 'location',
         purpose: 'pin',
         title: 'Pin del Mapa',
+      }),
+    ],
+  },
+
+  {
+    group: {
+      name: 'models',
+      title: `Sección de ${MAGIC_TITLE}s`,
+    },
+    fields: [
+      listBlockText({
+        type: 'title',
+        context: 'models',
+        purpose: 'modelsTitle',
+        title: `Título de la ${MAGIC_TITLE}s y Información`,
+      }),
+      reference({
+        context: 'models',
+        purpose: 'modelsList',
+        title: `Lista de ${MAGIC_TITLE}s`,
+        isArray: true,
+        to: MAGIC_TITLE.toLowerCase() as any,
+      }),
+    ],
+  },
+
+  {
+    group: {name: 'divider_2', title: 'Sección de segundo divisor'},
+    fields: [
+      image({
+        type: 'img',
+        context: 'divider_2',
+        purpose: 'dividerImage',
+        title: 'Imagen del Divisor',
       }),
     ],
   },

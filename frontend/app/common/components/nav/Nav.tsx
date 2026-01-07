@@ -6,6 +6,7 @@ import { useNavScrollShrink } from "./nav.animation";
 import ResponsiveImage from "../img/ResponsiveImage";
 import { useNavigation } from "../../hooks/useNavigation";
 import { CompanyModel } from "@/app/_domain/model/company.model";
+import ScrollToButton from "../btn/ScrollToButton";
 
 interface Props {
   companyData?: CompanyModel;
@@ -43,13 +44,12 @@ const Nav = ({ companyData }: Props) => {
             const active = isLinkActive(item.href);
             return (
               <li key={item.href}>
-                <a
-                  href={item.href}
+                <ScrollToButton
+                  to={item.href}
                   className={`nav-link ${active ? "active" : ""}`}
-                  aria-current={active ? "page" : undefined}
                 >
                   {item.title}
-                </a>
+                </ScrollToButton>
               </li>
             );
           })}

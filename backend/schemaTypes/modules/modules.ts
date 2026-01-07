@@ -217,6 +217,14 @@ export const HERO = () => {
         purpose: 'banner',
         title: 'Imagen de la cabecera',
       }),
+      {
+        name: 'file_video',
+        title: 'Video de la Introducción',
+        type: 'file',
+        options: {
+          accept: 'video/*',
+        },
+      },
     ],
   }
 }

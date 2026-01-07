@@ -58,6 +58,44 @@ export class AmenityModel extends BaseModel {
 
 ///////////////////////////////////////////////////////////////////////
 
+export class ProductoModel extends BaseModel {
+  public _id!: string;
+  public _type!: string;
+
+  public general!: {
+    list_block_title_general_description: Block[];
+    list_gallery: Image[];
+    string_line_general_category: string;
+    string_line_general_title: string;
+  };
+
+  constructor(data: any) {
+    super();
+
+    Object.assign(this, {
+      _id: this.safeString(data?._id),
+      _type: this.safeString(data?._type),
+
+      general: {
+        list_block_title_general_description: this.safeBlockText(
+          data?.general?.list_block_title_general_description
+        ),
+        list_gallery: this.safeArray(data?.general?.list_gallery, (img: any) =>
+          this.safeImage(img)
+        ),
+        string_line_general_category: this.safeString(
+          data?.general?.string_line_general_category
+        ),
+        string_line_general_title: this.safeString(
+          data?.general?.string_line_general_title
+        ),
+      },
+    });
+  }
+}
+
+///////////////////////////////////////////////////////////////////////
+
 export class HomePageModel extends BaseModel {
   public _id!: string;
   public _type!: string;
@@ -70,7 +108,21 @@ export class HomePageModel extends BaseModel {
     list_block_title_gallery_galleryTitle: Block[];
     list_images: Image[];
   };
+  public divider_1!: {
+    img_divider_1_dividerImage: Image;
+  };
+  public divider_2!: {
+    img_divider_2_dividerImage: Image;
+  };
+  public quote!: {
+    list_block_title_quote_quoteText: Block[];
+  };
   public hero!: {
+    file_video: {
+      media: {
+        url: string;
+      };
+    };
     img_hero_banner: Image;
     list_block_title_hero_title: Block[];
     string_h1: string;
@@ -79,6 +131,10 @@ export class HomePageModel extends BaseModel {
   public intro!: {
     img_intro_introImage: Image;
     list_block_title_intro_introTitle: Block[];
+  };
+  public models!: {
+    list_block_title_models_modelsTitle: Block[];
+    list_ref_models_modelsList: ProductoModel[];
   };
   public location!: {
     icon_location_pin: Image;
@@ -115,6 +171,21 @@ export class HomePageModel extends BaseModel {
           this.safeImage(img)
         ),
       },
+      quote: {
+        list_block_title_quote_quoteText: this.safeBlockText(
+          data?.quote?.list_block_title_quote_quoteText
+        ),
+      },
+      divider_1: {
+        img_divider_1_dividerImage: this.safeImage(
+          data?.divider_1?.img_divider_1_dividerImage
+        ),
+      },
+      divider_2: {
+        img_divider_2_dividerImage: this.safeImage(
+          data?.divider_2?.img_divider_2_dividerImage
+        ),
+      },
       hero: {
         img_hero_banner: this.safeImage(data?.hero?.img_hero_banner),
         list_block_title_hero_title: this.safeBlockText(
@@ -124,6 +195,11 @@ export class HomePageModel extends BaseModel {
         string_line_hero_button: this.safeString(
           data?.hero?.string_line_hero_button
         ),
+        file_video: {
+          media: {
+            url: this.safeString(data?.hero?.file_video?.media?.url),
+          },
+        },
       },
       intro: {
         img_intro_introImage: this.safeImage(data?.intro?.img_intro_introImage),
@@ -136,6 +212,15 @@ export class HomePageModel extends BaseModel {
         img_location_svg: this.safeImage(data?.location?.img_location_svg),
         list_block_title_location_locationTitle: this.safeBlockText(
           data?.location?.list_block_title_location_locationTitle
+        ),
+      },
+      models: {
+        list_block_title_models_modelsTitle: this.safeBlockText(
+          data?.models?.list_block_title_models_modelsTitle
+        ),
+        list_ref_models_modelsList: this.safeReferenceArray(
+          data?.models?.list_ref_models_modelsList,
+          ProductoModel
         ),
       },
       testy: {
