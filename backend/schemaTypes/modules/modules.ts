@@ -203,6 +203,11 @@ export const HERO = () => {
     group: 'hero',
     type: 'object',
     fields: [
+      {
+        ...bool({context: 'hero', purpose: 'show', title: 'Mostrar esta sección'}),
+        description: 'Actívalo para mostrar esta sección en el sitio; desactívalo para ocultarla.',
+        initialValue: true,
+      },
       stringH1(),
       listBlockText({type: 'title', context: 'hero', purpose: 'title'}),
       stringText({

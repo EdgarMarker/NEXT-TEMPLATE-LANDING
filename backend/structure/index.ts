@@ -19,7 +19,11 @@ export const structure: StructureResolver = (S) =>
       S.listItem()
         .icon(FaDesktop)
         .title('Inicio')
-        .child(S.document().schemaType('homePage').documentId('homePage')),
+        .child(
+          S.documentTypeList('homePage')
+            .title('Inicio')
+            .filter('_type == "homePage"'),
+        ),
       //----------------------------------------------
       S.divider(),
       //----------------------------------------------

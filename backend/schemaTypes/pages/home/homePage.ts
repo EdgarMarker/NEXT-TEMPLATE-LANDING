@@ -1,11 +1,43 @@
 import {createSection} from '../../../utils/helper-createSection'
-import {HERO, image, listBlockText, reference, SEO} from '../../modules/modules'
+import {
+  bool,
+  HERO,
+  image,
+  listBlockText,
+  reference,
+  SEO,
+  slug,
+  stringText,
+} from '../../modules/modules'
 import {MAGIC_TITLE} from '../product/product'
+
+const sectionToggle = (context: string) => ({
+  ...bool({context, purpose: 'show', title: 'Mostrar esta sección'}),
+  description: 'Actívalo para mostrar esta sección en el sitio; desactívalo para ocultarla.',
+  initialValue: true,
+})
+
+const GENERAL_GROUP = {name: 'general', title: 'General'}
+
+const GENERAL_FIELDS = [
+  stringText({
+    type: 'line',
+    context: 'general',
+    purpose: 'nombre',
+    title: 'Nombre (identificación interna)',
+    dsc: 'Nombre para identificar esta página de Inicio en la lista, no se muestra en la web',
+  }),
+  {
+    ...slug({value: 'general.string_line_general_nombre'}),
+    validation: (rule: any) => rule.required(),
+  },
+]
 
 const SECTIONS = [
   {
     group: {name: 'quote', title: 'Sección de frase'},
     fields: [
+      sectionToggle('quote'),
       listBlockText({
         type: 'title',
         context: 'quote',
@@ -17,6 +49,7 @@ const SECTIONS = [
   {
     group: {name: 'intro', title: 'Sección de Introducción'},
     fields: [
+      sectionToggle('intro'),
       listBlockText({
         type: 'title',
         context: 'intro',
@@ -35,6 +68,7 @@ const SECTIONS = [
   {
     group: {name: 'amenities', title: 'Sección de Amenidades'},
     fields: [
+      sectionToggle('amenities'),
       listBlockText({
         type: 'title',
         context: 'amenities',
@@ -54,6 +88,7 @@ const SECTIONS = [
   {
     group: {name: 'divider_1', title: 'Sección de primer divisor'},
     fields: [
+      sectionToggle('divider_1'),
       image({
         type: 'img',
         context: 'divider_1',
@@ -66,6 +101,7 @@ const SECTIONS = [
   {
     group: {name: 'location', title: 'Sección de Ubicación'},
     fields: [
+      sectionToggle('location'),
       listBlockText({
         type: 'title',
         context: 'location',
@@ -93,6 +129,7 @@ const SECTIONS = [
       title: `Sección de ${MAGIC_TITLE}s`,
     },
     fields: [
+      sectionToggle('models'),
       listBlockText({
         type: 'title',
         context: 'models',
@@ -112,6 +149,7 @@ const SECTIONS = [
   {
     group: {name: 'divider_2', title: 'Sección de segundo divisor'},
     fields: [
+      sectionToggle('divider_2'),
       image({
         type: 'img',
         context: 'divider_2',
@@ -124,6 +162,7 @@ const SECTIONS = [
   {
     group: {name: 'testy', title: 'Sección de Testimonios'},
     fields: [
+      sectionToggle('testy'),
       listBlockText({
         type: 'title',
         context: 'testy',
@@ -143,6 +182,7 @@ const SECTIONS = [
   {
     group: {name: 'gallery', title: 'Sección de Galería'},
     fields: [
+      sectionToggle('gallery'),
       listBlockText({
         type: 'title',
         context: 'gallery',
@@ -173,15 +213,26 @@ export const homePage = {
   name: 'homePage',
   type: 'document',
   groups: [
+    GENERAL_GROUP,
     {name: 'hero', title: 'Cabecera'},
     ...SECTIONS.map(({group}) => group),
     {name: 'seo', title: 'SEO'},
   ],
-  fields: [HERO(), ...SECTIONS.map(({group, fields}) => createSection(group, fields)), SEO()],
+  fields: [
+    createSection(GENERAL_GROUP, GENERAL_FIELDS),
+    HERO(),
+    ...SECTIONS.map(({group, fields}) => createSection(group, fields)),
+    SEO(),
+  ],
   preview: {
-    prepare() {
+    select: {
+      title: 'general.string_line_general_nombre',
+      subtitle: 'general.slug.current',
+    },
+    prepare({title, subtitle}: {title?: string; subtitle?: string}) {
       return {
-        title: 'Vista de Inicio',
+        title: title || 'Vista de Inicio',
+        subtitle: subtitle ? `/${subtitle}` : undefined,
       }
     },
   },

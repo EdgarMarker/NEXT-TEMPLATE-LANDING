@@ -1,61 +1,53 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import "./banner.css";
-import React, { useState, useEffect } from "react";
-
-const getCookie = (name: string) => {
-  if (typeof document === "undefined") return null;
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(";").shift();
-  return null;
-};
-
-const setCookie = (name: string, value: string, days: number) => {
-  const date = new Date();
-  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/; SameSite=Lax`;
-};
+import React, { useState } from "react";
+import { useCookieConsent } from "@/app/common/hooks/useCookieConsent";
+import { ALL_ACCEPTED, ALL_REJECTED } from "@/app/common/lib/cookies/cookieConsent";
+import { CookiePreferencesModal } from "./CookiePreferencesModal";
 
 export const CookieBanner = () => {
-  const [showBanner, setShowBanner] = useState(false);
+  const { consent, hasDecided, saveConsent } = useCookieConsent();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  useEffect(() => {
-    const hasConsent = getCookie("user_consent") === "true";
-    setShowBanner(!hasConsent);
-  }, []);
-
-  const acceptCookies = () => {
-    setCookie("user_consent", "true", 7);
-    setShowBanner(false);
-  };
-
-  const declineCookies = () => {
-    setCookie("user_consent", "false", 7);
-    setShowBanner(false);
-  };
-
-  if (!showBanner) return null;
+  const activeConsent = consent ?? ALL_REJECTED;
 
   return (
-    <div
-      className="banner-container"
-      role="dialog"
-      aria-live="polite"
-      aria-label="Aviso de cookies"
-    >
-      <p className="banner-text">
-        Utilizamos cookies para mejorar tu experiencia y mostrarte publicidad
-        personalizada según tus hábitos de navegación.
-      </p>
-      <div className="banner-buttons">
-        <button className="btn-decline" onClick={declineCookies}>
-          Rechazar
-        </button>
-        <button className="btn-accept" onClick={acceptCookies}>
-          Aceptar
-        </button>
-      </div>
-    </div>
+    <>
+      {!hasDecided && (
+        <div
+          className="banner-container"
+          role="dialog"
+          aria-live="polite"
+          aria-label="Aviso de cookies"
+        >
+          <h2>Valoramos tu privacidad</h2>
+          <p>
+            Usamos cookies para mejorar tu experiencia. Puedes configurar, rechazar o aceptar
+            las cookies no esenciales.
+          </p>
+          <div className="btn__wrapper">
+            <button className="btn btn-outline" onClick={() => setIsSettingsOpen(true)}>
+              Configurar cookies
+            </button>
+            <button className="btn btn-decline" onClick={() => saveConsent(ALL_REJECTED)}>
+              Rechazar todo
+            </button>
+            <button className="btn btn-accept" onClick={() => saveConsent(ALL_ACCEPTED)}>
+              Aceptar todo
+            </button>
+          </div>
+        </div>
+      )}
+
+      <CookiePreferencesModal
+        isOpen={isSettingsOpen}
+        initialConsent={activeConsent}
+        onClose={() => setIsSettingsOpen(false)}
+        onSave={(next) => {
+          saveConsent(next);
+          setIsSettingsOpen(false);
+        }}
+      />
+    </>
   );
 };

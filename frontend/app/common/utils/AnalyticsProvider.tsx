@@ -8,21 +8,8 @@ import React, {
 } from "react";
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
-
-// --- Funciones de utilidad para Cookies (Nativas) ---
-const getCookie = (name: string) => {
-  if (typeof document === "undefined") return null;
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(";").shift();
-  return null;
-};
-
-const setCookie = (name: string, value: string, days: number) => {
-  const date = new Date();
-  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/; SameSite=Lax`;
-};
+import { getCookie, setCookie } from "@/app/common/lib/cookies/cookieConsent";
+import { useCookieConsent } from "@/app/common/hooks/useCookieConsent";
 
 declare global {
   interface Window {
@@ -49,6 +36,11 @@ export const AnalyticsProvider = ({
 }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { consent } = useCookieConsent();
+
+  // Cookies de segmentación (Meta Pixel) y rendimiento (GTM) requieren consentimiento explícito.
+  const canTargeting = consent?.targeting === true;
+  const canPerformance = consent?.performance === true;
 
   const track = useCallback(
     async (eventName: string) => {
@@ -59,7 +51,7 @@ export const AnalyticsProvider = ({
       const fbp = getCookie("_fbp") || "";
 
       // --- META ---
-      if (config?.pixelId) {
+      if (config?.pixelId && canTargeting) {
         if (window.fbq) {
           window.fbq(
             "track",
@@ -88,17 +80,19 @@ export const AnalyticsProvider = ({
       }
 
       // --- GOOGLE ---
-      if (config?.gtmId && window.dataLayer) {
+      if (config?.gtmId && canPerformance && window.dataLayer) {
         window.dataLayer.push({
           event: eventName,
           metaEventId: eventId,
         });
       }
     },
-    [config]
+    [config, canTargeting, canPerformance]
   );
 
   useEffect(() => {
+    if (!canTargeting) return;
+
     const fbclid = searchParams.get("fbclid");
     if (fbclid) {
       setCookie("_fbc", `fb.1.${Date.now()}.${fbclid}`, 7);
@@ -107,14 +101,16 @@ export const AnalyticsProvider = ({
     if (!getCookie("user_external_id")) {
       setCookie("user_external_id", crypto.randomUUID(), 7);
     }
+  }, [canTargeting, searchParams]);
 
+  useEffect(() => {
     track("PageView");
   }, [pathname, searchParams, track]);
 
   return (
     <AnalyticsContext.Provider value={{ track }}>
-      {/* Script Meta Pixel */}
-      {config?.pixelId && (
+      {/* Script Meta Pixel — solo si el usuario aceptó cookies de segmentación */}
+      {config?.pixelId && canTargeting && (
         <Script
           id="fb-pixel"
           strategy="afterInteractive"
@@ -124,8 +120,8 @@ export const AnalyticsProvider = ({
         />
       )}
 
-      {/* Script Google Tag Manager */}
-      {config?.gtmId && (
+      {/* Script Google Tag Manager — solo si el usuario aceptó cookies de rendimiento */}
+      {config?.gtmId && canPerformance && (
         <Script
           id="gtm-script"
           strategy="afterInteractive"

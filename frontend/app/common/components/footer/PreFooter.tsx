@@ -2,7 +2,7 @@ import "./footer.css";
 import { CompanyModel } from "@/app/_domain/model/company.model";
 import { getCompanyData } from "@/app/_domain/services/company.services";
 import { createContract } from "@/app/common/utils/helper-contract";
-import HubspotForm from "../form/HubspotForm";
+import ResendForm from "../form/ResendForm";
 
 const PreFooter = async () => {
   const data = await createContract(getCompanyData, CompanyModel);
@@ -52,7 +52,7 @@ const PreFooter = async () => {
           </ul>
         </div>
         <div className="col__right">
-          <HubspotForm />
+          <ResendForm />
         </div>
       </div>
     </section>

@@ -77,13 +77,19 @@ export const getProductoData = async () => {
 export const HOMEPAGE_FIELDS = `
   _id,
   _type,
+  general {
+    string_line_general_nombre,
+    slug
+  },
   amenities {
+    bool_amenities_show,
     list_block_title_amenities_amenitiesTitle,
     list_ref_amenities_amenitiesList[] -> {
       ${AMENITY_FIELDS}
     }
   },
   gallery {
+    bool_gallery_show,
     list_block_title_gallery_galleryTitle,
     list_images[]{
       "media": asset -> { url },
@@ -91,6 +97,7 @@ export const HOMEPAGE_FIELDS = `
     }
   },
   hero {
+    bool_hero_show,
     file_video{
       "media": asset -> { url }
     },
@@ -103,9 +110,11 @@ export const HOMEPAGE_FIELDS = `
     string_line_hero_button
   },
   quote {
+    bool_quote_show,
     list_block_title_quote_quoteText
   },
   intro {
+    bool_intro_show,
     img_intro_introImage {
       "media": asset -> { url },
       "alt": asset -> { altText }
@@ -113,18 +122,21 @@ export const HOMEPAGE_FIELDS = `
     list_block_title_intro_introTitle
   },
   divider_1 {
+    bool_divider_1_show,
     img_divider_1_dividerImage {
       "media": asset -> { url },
       "alt": asset -> { altText }
     }
   },
   divider_2 {
+    bool_divider_2_show,
     img_divider_2_dividerImage {
       "media": asset -> { url },
       "alt": asset -> { altText }
     }
   },
   location {
+    bool_location_show,
     icon_location_pin {
       "media": asset -> { url },
       "alt": asset -> { altText }
@@ -136,12 +148,14 @@ export const HOMEPAGE_FIELDS = `
     list_block_title_location_locationTitle
   },
   models {
+    bool_models_show,
     list_block_title_models_modelsTitle,
     list_ref_models_modelsList[] -> {
       ${PRODUCTO_FIELDS}
     }
   },
   testy {
+    bool_testy_show,
     list_block_title_testy_testyTitle,
     list_ref_testy_testyList[] -> {
       ${TESTIMONIAL_FIELDS}
@@ -154,13 +168,35 @@ export const HOMEPAGE_FIELDS = `
   },
 `;
 
-export const getHomePageData = async () => {
+export const getHomePageDataBySlug = async (slug: string) => {
   const QUERY = `
-    *[_type == "homePage"][0] {
+    *[_type == "homePage" && general.slug.current == $slug][0] {
       ${HOMEPAGE_FIELDS}
     }
   `;
 
-  const data = await getSanityClient().fetch(QUERY);
+  const data = await getSanityClient().fetch(QUERY, { slug });
   return data;
+};
+
+export const getFirstHomePageSlug = async (): Promise<string | null> => {
+  const QUERY = `
+    *[_type == "homePage" && defined(general.slug.current)] | order(_createdAt asc) [0] {
+      "slug": general.slug.current
+    }
+  `;
+
+  const data = await getSanityClient().fetch(QUERY);
+  return data?.slug ?? null;
+};
+
+export const getAllHomePageSlugs = async (): Promise<string[]> => {
+  const QUERY = `
+    *[_type == "homePage" && defined(general.slug.current)] | order(_createdAt asc) {
+      "slug": general.slug.current
+    }
+  `;
+
+  const data = await getSanityClient().fetch(QUERY);
+  return (data ?? []).map((item: { slug: string }) => item.slug);
 };

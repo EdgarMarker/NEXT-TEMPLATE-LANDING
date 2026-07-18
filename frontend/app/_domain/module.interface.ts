@@ -208,14 +208,14 @@ export class BaseModel {
     return this.safeArray(value, (item) => new ModelClass(item));
   }
 
-  safeBool(value: unknown): boolean {
+  safeBool(value: unknown, defaultValue = false): boolean {
     if (typeof value === "boolean") {
       return value;
     }
     if (typeof value === "string") {
       return value.toLowerCase() === "true";
     }
-    return false;
+    return defaultValue;
   }
 
   safeAny(value: unknown): any {
